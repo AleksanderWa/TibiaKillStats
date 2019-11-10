@@ -8,9 +8,6 @@ from operator import attrgetter
 from Parser import WORLDS_LIST
 
 date_regex = '([0-9]{2}\_[0-9]{2}\_[0-9]{4})'
-global_mobs_list = []
-max_killed_list = []  # LIST CONATAINING TOP MONSTERS FROM EACH WORLD FOR EACH DAY
-max_killed_players = []
 DATES = ("02_11_2019", "03_11_2019", "04_11_2019")
 
 
@@ -84,6 +81,7 @@ def _get_worlds_for_given_monster(max_killed_list, mob_name):
 
 
 if __name__ == '__main__':
+    global_mobs_list = []
     for world, date in product(WORLDS_LIST, DATES):
         if date == "03_11_2019":
             filename = f"worlds/{world}_{date}.csv"
@@ -91,6 +89,7 @@ if __name__ == '__main__':
             list_from_date = read_csv_file(filename, world)
             global_mobs_list.append(list_from_date)
 
+    max_killed_list = []
     top5_killed_mob = get_highest_kill_count(max_killed_list, "death_numb")
     mostly_killed_monster = list(top5_killed_mob.items())[0]
     print(f"MOSTLY KILLED MONSTERS : {mostly_killed_monster}")
@@ -99,6 +98,7 @@ if __name__ == '__main__':
     for i in temp_list[:5]:
         print(i.name, i.death_numb, i.world, i.date_stats)
 
+    max_killed_players = []
     top5_mob_killers = get_highest_kill_count(max_killed_players, "killed_players")
     mostly_deadly_monsters = list(top5_mob_killers.items())[0]
     print(f"THE MOST DEADLY  MONSTERS : {mostly_deadly_monsters}")
