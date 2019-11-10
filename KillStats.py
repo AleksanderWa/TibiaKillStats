@@ -62,8 +62,13 @@ def get_highest_kill_count(max_count_list, count_for):
             max_count_list.append(max_nmb_creatre_creatre)
 
     c = Counter()
-    for monster in max_count_list:
-        c.update({monster.name: monster.death_numb})
+
+    if count_for == "death_numb":
+        for monster in max_count_list:
+            c.update({monster.name: monster.death_numb})
+    elif count_for == "killed_players":
+        for monster in max_count_list:
+            c.update({monster.name: monster.killed_players})
 
     # mx = max(c, key=lambda key: c[key])
 
@@ -80,10 +85,11 @@ def _get_worlds_for_given_monster(max_killed_list, mob_name):
 
 if __name__ == '__main__':
     for world, date in product(WORLDS_LIST, DATES):
-        filename = f"worlds/{world}_{date}.csv"
+        if date == "03_11_2019":
+            filename = f"worlds/{world}_{date}.csv"
 
-        list_from_date = read_csv_file(filename, world)
-        global_mobs_list.append(list_from_date)
+            list_from_date = read_csv_file(filename, world)
+            global_mobs_list.append(list_from_date)
 
     top5_killed_mob = get_highest_kill_count(max_killed_list, "death_numb")
     mostly_killed_monster = list(top5_killed_mob.items())[0]
@@ -96,7 +102,7 @@ if __name__ == '__main__':
     top5_mob_killers = get_highest_kill_count(max_killed_players, "killed_players")
     mostly_deadly_monsters = list(top5_mob_killers.items())[0]
     print(f"THE MOST DEADLY  MONSTERS : {mostly_deadly_monsters}")
-    temp_list = _get_worlds_for_given_monster(max_killed_players, list(top5_mob_killers.keys())[0])
+    temp_list = _get_worlds_for_given_monster(max_killed_players, list(top5_mob_killers.keys())[1])
     temp_list.sort(key=attrgetter('killed_players'), reverse=True)
     for i in temp_list[:5]:
         print(i.name, i.killed_players, i.world, i.date_stats)
